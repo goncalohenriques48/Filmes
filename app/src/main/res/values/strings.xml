@@ -7,4 +7,11 @@
     <string name="get_started">Get Started</string>
     <string name="start">Start</string>
     <string name="start2">Start2</string>
+
+    <string name="login">Login</string>
+    <string name="username">UserName</string>
+    <string name="password">Password</string>
+    <string name="forget_your_password">Forget Your Password?</string>
+    <string name="don_t_have_an_account">Don\'t have an account</string>
+    <string name="register_now">Register Now</string>
 </resources>
