@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Filmes</string>
+    <string name="discover_your">Discover Your</string>
+    <string name="favorite_show">Favorite Show</string>
+    <string name="watch">Watch Now or Watch Later</string>
+    <string name="browse">you can browse movies and shows by genre, search for specific title, or check out our recommendation for you</string>
+    <string name="get_started">Get Started</string>
+    <string name="start">Start</string>
+    <string name="start2">Start2</string>
+</resources>
