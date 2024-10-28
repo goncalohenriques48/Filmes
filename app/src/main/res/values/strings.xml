@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Filmes</string>
+    <string name="app_name">Movies</string>
     <string name="discover_your">Discover Your</string>
     <string name="favorite_show">Favorite Show</string>
     <string name="watch">Watch Now or Watch Later</string>
@@ -14,4 +14,17 @@
     <string name="forget_your_password">Forget Your Password?</string>
     <string name="don_t_have_an_account">Don\'t have an account</string>
     <string name="register_now">Register Now</string>
+
+    <string name="search_movies">Search Movies…</string>
+    <string name="best_movies">Best Movies</string>
+    <string name="category">Category</string>
+    <string name="upcoming_movies">Upcoming Movies</string>
+    <string name="explorer">Explorer</string>
+    <string name="favorite">Favorite</string>
+    <string name="cart">Cart</string>
+    <string name="profile">Profile</string>
+    <string name="icon_explorer">Icon Explorer</string>
+    <string name="icon_favorite">Icon Favorite</string>
+    <string name="icon_cart">Icon Cart</string>
+    <string name="icon_profile">Icon Profile</string>
 </resources>
