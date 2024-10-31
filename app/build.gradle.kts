@@ -4,12 +4,12 @@ plugins {
 }
 
 android {
-    namespace = "pt.ipt.dam.filmes"
+    namespace = "pt.ipt.dam.movies"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "pt.ipt.dam.filmes"
-        minSdk = 24
+        applicationId = "pt.ipt.dam.movies"
+        minSdk = 31
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -43,6 +43,7 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
     implementation("androidx.viewpager2:viewpager2:1.1.0")
+    implementation ("com.github.bumptech.glide:glide:4.12.0")
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

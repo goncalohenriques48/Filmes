@@ -40,6 +40,7 @@
                 android:layout_height="200dp">
 
                 <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewpagerSlider"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:paddingStart="60dp"
@@ -204,7 +205,8 @@
                     android:text="@string/explorer"
                     android:textColor="@color/white"
                     app:drawableTint="@color/white"
-                    app:drawableTopCompat="@drawable/btn_1"></TextView>
+                    app:drawableTopCompat="@drawable/btn_1">
+                </TextView>
 
                 <LinearLayout
                     android:layout_width="0dp"

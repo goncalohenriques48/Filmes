@@ -1,4 +1,4 @@
-package pt.ipt.dam.filmes
+package pt.ipt.dam.movies
 
 import org.junit.Test
 

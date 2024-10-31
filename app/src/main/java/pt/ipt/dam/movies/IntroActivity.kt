@@ -1,4 +1,4 @@
-package pt.ipt.dam.filmes
+package pt.ipt.dam.movies
 
 import android.content.Intent
 import android.os.Bundle
