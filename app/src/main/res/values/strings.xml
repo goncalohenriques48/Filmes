@@ -31,4 +31,12 @@
     <string name="TitleTxt">TitleTxt</string>
     <string name="summary">Summary</string>
     <string name="actors">Actors</string>
+
+    <string name="registo">Registo</string>
+    <string name="nome">Nome</string>
+    <string name="email">Email</string>
+    <string name="confirmar_password">Confirmar Password</string>
+    <string name="registar">Registar</string>
+    <string name="j_tem_uma_conta_fa_a_login">Já tem uma conta? Faça login</string>
+    <string name="voice_search">Pesquisar por voz</string>
 </resources>

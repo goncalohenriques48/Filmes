@@ -26,6 +26,20 @@ import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.speech.RecognitionListener
+import android.speech.SpeechRecognizer
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import android.speech.RecognizerIntent
+import android.content.ActivityNotFoundException
+import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
     private lateinit var adapterBestMovies: RecyclerView.Adapter<*>
@@ -44,6 +58,10 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewPager2: ViewPager2
     private val sliderHandler = android.os.Handler()
 
+    private lateinit var searchEdt: EditText
+    private lateinit var micButton: ImageView
+    private val SPEECH_REQUEST_CODE = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -60,6 +78,8 @@ class MainActivity : AppCompatActivity() {
         sendRequestBestMovies()
         sendRequestUpComing()
         sendRequestCategory()
+
+        setupVoiceSearch()
     }
 
     private fun sendRequestBestMovies() {
@@ -183,5 +203,116 @@ class MainActivity : AppCompatActivity() {
         loading1 = findViewById(R.id.progressBar1)
         loading2 = findViewById(R.id.progressBar2)
         loading3 = findViewById(R.id.progressBar3)
+    }
+
+    private fun setupVoiceSearch() {
+        searchEdt = findViewById(R.id.editTextText2)
+        micButton = findViewById(R.id.microphoneButton)
+        micButton.setOnClickListener {
+            if (checkAudioPermission()) {
+                startVoiceRecognition()
+            } else {
+                requestAudioPermission()
+            }
+        }
+    }
+    private fun checkAudioPermission(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.RECORD_AUDIO
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+    private fun requestAudioPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.RECORD_AUDIO),
+            SPEECH_REQUEST_CODE
+        )
+    }
+    private fun startVoiceRecognition() {
+        val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
+            putExtra(RecognizerIntent.EXTRA_PROMPT, "Diga o nome do filme...")
+        }
+        try {
+            startActivityForResult(intent, SPEECH_REQUEST_CODE)
+        } catch (e: ActivityNotFoundException) {
+            Toast.makeText(
+                this,
+                "Seu dispositivo não suporta reconhecimento de voz",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
+            val spokenText: String? =
+                data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)?.let { results ->
+                    results[0]
+                }
+            spokenText?.let {
+                searchEdt.setText(it)
+                searchMovies(it)
+            }
+        }
+    }
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == SPEECH_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startVoiceRecognition()
+            } else {
+                Toast.makeText(
+                    this,
+                    "Permissão de áudio necessária para pesquisa por voz",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+    private fun searchMovies(query: String) {
+        loading1.visibility = View.VISIBLE
+        mRequestQueue = Volley.newRequestQueue(this)
+        // URL da API com o parâmetro de busca
+        val url = "https://moviesapi.ir/api/v1/movies?q=$query"
+        mStringRequest = StringRequest(
+            Request.Method.GET,
+            url,
+            { response ->
+                loading1.visibility = View.GONE
+                val gson = Gson()
+                val listFilm = gson.fromJson(response, ListFilm::class.java)
+                // Verifica se encontrou algum filme
+                if (listFilm.data?.isNotEmpty() == true) {
+                    // Pega o primeiro filme encontrado
+                    val firstMovie = listFilm.data!![0]
+                    // Abre o DetailActivity com o ID do filme encontrado
+                    val intent = Intent(this, DetailActivity::class.java)
+                    intent.putExtra("id", firstMovie.id)
+                    startActivity(intent)
+                } else {
+                    Toast.makeText(
+                        this,
+                        "Nenhum filme encontrado com esse nome",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            },
+            { error ->
+                loading1.visibility = View.GONE
+                Toast.makeText(
+                    this,
+                    "Erro ao buscar o filme: ${error.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        )
+        mRequestQueue.add(mStringRequest)
     }
 }
