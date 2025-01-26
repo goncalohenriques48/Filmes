@@ -27,4 +27,8 @@
     <string name="icon_favorite">Icon Favorite</string>
     <string name="icon_cart">Icon Cart</string>
     <string name="icon_profile">Icon Profile</string>
+
+    <string name="TitleTxt">TitleTxt</string>
+    <string name="summary">Summary</string>
+    <string name="actors">Actors</string>
 </resources>
