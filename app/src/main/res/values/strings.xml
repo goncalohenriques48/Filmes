@@ -1,36 +1,36 @@
 <resources>
     <string name="app_name">Movies</string>
-    <string name="discover_your">Discover Your</string>
-    <string name="favorite_show">Favorite Show</string>
-    <string name="watch">Watch Now or Watch Later</string>
-    <string name="browse">you can browse movies and shows by genre, search for specific title, or check out our recommendation for you</string>
-    <string name="get_started">Get Started</string>
+    <string name="discover_your">Descobre o teu</string>
+    <string name="favorite_show">Filme Favorito</string>
+    <string name="watch">Vê Agora ou Mais tarde</string>
+    <string name="browse">podes navegar por filmes e programas por género, pesquisar títulos específicos ou verificar a nossa recomendação</string>
+    <string name="get_started">Começar</string>
     <string name="start">Start</string>
     <string name="start2">Start2</string>
 
     <string name="login">Login</string>
     <string name="username">UserName</string>
     <string name="password">Password</string>
-    <string name="forget_your_password">Forget Your Password?</string>
-    <string name="don_t_have_an_account">Don\'t have an account</string>
-    <string name="register_now">Register Now</string>
+    <string name="forget_your_password">Esqueceu a sua Password?</string>
+    <string name="don_t_have_an_account">Não tem uma conta?</string>
+    <string name="register_now">Registe-se Agora</string>
 
-    <string name="search_movies">Search Movies…</string>
-    <string name="best_movies">Best Movies</string>
-    <string name="category">Category</string>
-    <string name="upcoming_movies">Upcoming Movies</string>
+    <string name="search_movies">Procurar Filmes…</string>
+    <string name="best_movies">Melhores Filmes</string>
+    <string name="category">Categoria</string>
+    <string name="upcoming_movies">Próximos filmes</string>
     <string name="explorer">Explorer</string>
-    <string name="favorite">Favorite</string>
-    <string name="cart">Cart</string>
-    <string name="profile">Profile</string>
+    <string name="favorite">Favorito</string>
+    <string name="cart">Carrinho</string>
+    <string name="profile">Perfil</string>
     <string name="icon_explorer">Icon Explorer</string>
     <string name="icon_favorite">Icon Favorite</string>
     <string name="icon_cart">Icon Cart</string>
     <string name="icon_profile">Icon Profile</string>
 
     <string name="TitleTxt">TitleTxt</string>
-    <string name="summary">Summary</string>
-    <string name="actors">Actors</string>
+    <string name="summary">Resumo</string>
+    <string name="actors">Atores</string>
 
     <string name="registo">Registo</string>
     <string name="nome">Nome</string>
@@ -39,4 +39,13 @@
     <string name="registar">Registar</string>
     <string name="j_tem_uma_conta_fa_a_login">Já tem uma conta? Faça login</string>
     <string name="voice_search">Pesquisar por voz</string>
+
+    <string name="sobre">Sobre</string>
+    <string name="info_titulo">Informações do Projeto</string>
+    <string name="info_curso">Curso: Engenharia Informática</string>
+    <string name="info_disciplina">Disciplina: Desenvolvimento de Aplicações Móveis</string>
+    <string name="info_ano">Ano Letivo: 2024/2025</string>
+    <string name="info_autores">Autores:\nGonçalo Henriques 21590\nRodrigo Henriques 25268</string>
+    <string name="fechar">Fechar</string>
+
 </resources>

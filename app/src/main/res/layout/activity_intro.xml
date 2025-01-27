@@ -8,6 +8,18 @@
     android:background="@color/main_color"
     tools:context=".IntroActivity">
 
+    <!-- Botão Sobre no canto superior direito -->
+    <Button
+        android:id="@+id/btnSobre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/sobre"
+        android:textColor="@color/white"
+        android:background="@drawable/orange_button_background"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:elevation="4dp"/>
 
     <ScrollView
         android:layout_width="match_parent"

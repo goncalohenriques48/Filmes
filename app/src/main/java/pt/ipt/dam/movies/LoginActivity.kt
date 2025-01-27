@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import android.widget.TextView
 
 public class LoginActivity : AppCompatActivity() {
     private lateinit var userEdt: EditText
@@ -25,6 +26,12 @@ public class LoginActivity : AppCompatActivity() {
             insets
         }
         initView();
+
+        // Adicionar listener para o TextView de registo
+        val textViewRegisterNow: TextView = findViewById(R.id.textView10)
+        textViewRegisterNow.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
+        }
     }
 
     private fun initView() {
