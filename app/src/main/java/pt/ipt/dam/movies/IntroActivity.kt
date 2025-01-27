@@ -1,5 +1,7 @@
 package pt.ipt.dam.movies
 
+import android.app.Dialog
+import android.widget.TextView
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -24,5 +26,24 @@ class IntroActivity : AppCompatActivity() {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
         }
+
+        // Configurar o botão Sobre
+        val btnSobre: Button = findViewById(R.id.btnSobre)
+        btnSobre.setOnClickListener {
+            mostrarDialogoSobre()
+        }
+    }
+
+    private fun mostrarDialogoSobre() {
+        val dialogo = Dialog(this)
+        dialogo.setContentView(R.layout.dialog_sobre)
+
+        // Configurar o botão de fechar
+        val btnFechar: Button = dialogo.findViewById(R.id.btnFechar)
+        btnFechar.setOnClickListener {
+            dialogo.dismiss()
+        }
+
+        dialogo.show()
     }
 }
