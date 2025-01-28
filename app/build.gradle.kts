@@ -49,4 +49,11 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation ("io.github.jan-tennert.supabase:postgrest-kt:1.4.7")
+    implementation ("io.github.jan-tennert.supabase:gotrue-kt:1.4.7")
+    implementation ("io.ktor:ktor-client-android:2.3.7")
+
+
+
 }

@@ -3,6 +3,7 @@ package pt.ipt.dam.movies
 import Adapters.CategoryListAdapter
 import Adapters.FilmListAdapter
 import Adapters.SliderAdapters
+import Domain.FilmItem
 import Domain.GenresItem
 import Domain.ListFilm
 import Domain.SliderItems
@@ -38,10 +39,16 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import android.speech.RecognizerIntent
 import android.content.ActivityNotFoundException
+import android.content.Context
 import java.util.*
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
+import kotlin.math.sqrt
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SensorEventListener {
     private lateinit var adapterBestMovies: RecyclerView.Adapter<*>
     private lateinit var adapterUpComing: RecyclerView.Adapter<*>
     private lateinit var adapterCategory: RecyclerView.Adapter<*>
@@ -62,6 +69,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var micButton: ImageView
     private val SPEECH_REQUEST_CODE = 0
 
+    private lateinit var sensorManager: SensorManager
+    private var accelerometer: Sensor? = null
+    private var lastUpdate: Long = 0
+    private var lastX: Float = 0f
+    private var lastY: Float = 0f
+    private var lastZ: Float = 0f
+    private val SHAKE_THRESHOLD = 200
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -80,6 +95,10 @@ class MainActivity : AppCompatActivity() {
         sendRequestCategory()
 
         setupVoiceSearch()
+
+        // Inicializar sensor
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
     }
 
     private fun sendRequestBestMovies() {
@@ -182,11 +201,15 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         sliderHandler.removeCallbacks(sliderRunnable)
+        sensorManager.unregisterListener(this)
     }
 
     override fun onResume() {
         super.onResume()
         sliderHandler.postDelayed(sliderRunnable, 2000)
+        accelerometer?.let {
+            sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
+        }
     }
 
     private fun initView() {
@@ -309,6 +332,79 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(
                     this,
                     "Erro ao buscar o filme: ${error.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        )
+        mRequestQueue.add(mStringRequest)
+    }
+
+    override fun onSensorChanged(event: SensorEvent) {
+        if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
+            val curTime = System.currentTimeMillis()
+            // Só processa se passou mais de 100ms desde a última atualização
+            if ((curTime - lastUpdate) > 100) {
+                val diffTime = curTime - lastUpdate
+                lastUpdate = curTime
+                
+                val x = event.values[0]
+                val y = event.values[1]
+                val z = event.values[2]
+                
+                val speed = sqrt(
+                    ((x - lastX) * (x - lastX) + 
+                    (y - lastY) * (y - lastY) + 
+                    (z - lastZ) * (z - lastZ)) / diffTime * 10000
+                )
+                
+                if (speed > SHAKE_THRESHOLD) {
+                    // Usuário agitou o dispositivo, buscar filme aleatório
+                    getRandomMovie()
+                }
+                
+                lastX = x
+                lastY = y
+                lastZ = z
+            }
+        }
+    }
+    
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        // Não é necessário implementar
+    }
+    
+    private fun getRandomMovie() {
+        loading1.visibility = View.VISIBLE
+        mRequestQueue = Volley.newRequestQueue(this)
+        
+        // Gerar um ID aleatório entre 1 e 250 (ajuste conforme necessário)
+        val randomId = (1..250).random()
+        val url = "https://moviesapi.ir/api/v1/movies/$randomId"
+        
+        mStringRequest = StringRequest(
+            Request.Method.GET,
+            url,
+            { response ->
+                loading1.visibility = View.GONE
+                val gson = Gson()
+                val movie = gson.fromJson(response, FilmItem::class.java)
+                
+                // Abrir DetailActivity com o filme aleatório
+                val intent = Intent(this, DetailActivity::class.java)
+                intent.putExtra("id", movie.id)
+                startActivity(intent)
+                
+                Toast.makeText(
+                    this,
+                    "Filme aleatório encontrado!",
+                    Toast.LENGTH_SHORT
+                ).show()
+            },
+            { error ->
+                loading1.visibility = View.GONE
+                Toast.makeText(
+                    this,
+                    "Erro ao buscar filme aleatório: ${error.message}",
                     Toast.LENGTH_SHORT
                 ).show()
             }

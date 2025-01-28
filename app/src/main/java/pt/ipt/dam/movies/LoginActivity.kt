@@ -9,36 +9,63 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import android.widget.TextView
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import io.github.jan.supabase.gotrue.gotrue
+import io.github.jan.supabase.gotrue.providers.builtin.Email
+import pt.ipt.dam.movies.utils.SupabaseClient
 
-public class LoginActivity : AppCompatActivity() {
+
+class LoginActivity : AppCompatActivity() {
     private lateinit var userEdt: EditText
     private lateinit var passEdt: EditText
     private lateinit var loginBtn: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_login)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+
+        initView()
+
+        val textViewRegisterNow: TextView = findViewById(R.id.textView10)
+        textViewRegisterNow.setOnClickListener {
+            startActivity(Intent(this, RegisterActivity::class.java))
         }
-        initView();
     }
 
     private fun initView() {
-        userEdt = findViewById(R.id.editTextText);
-        passEdt = findViewById(R.id.editTextPassword);
-        loginBtn = findViewById(R.id.BT_Login);
+        userEdt = findViewById(R.id.editTextText)
+        passEdt = findViewById(R.id.editTextPassword)
+        loginBtn = findViewById(R.id.BT_Login)
 
         loginBtn.setOnClickListener {
             if (userEdt.text.toString().isEmpty() || passEdt.text.toString().isEmpty()) {
-                Toast.makeText(this, "Please fill your user and password", Toast.LENGTH_SHORT).show()
-            } else if (userEdt.text.toString() == "test" && passEdt.text.toString() == "test") {
-                startActivity(Intent(this, MainActivity::class.java))
+                Toast.makeText(this, "Por favor, preencha todos os campos", Toast.LENGTH_SHORT).show()
             } else {
-                Toast.makeText(this, "Your user and password is not correct", Toast.LENGTH_SHORT).show()
+                loginWithSupabase(userEdt.text.toString(), passEdt.text.toString())
+            }
+        }
+    }
+
+    private fun loginWithSupabase(email: String, password: String) {
+        lifecycleScope.launch {
+            try {
+                SupabaseClient.client.gotrue.loginWith(Email) {
+                    this.email = email
+                    this.password = password
+                }
+                // Login bem sucedido
+                startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+                finish()
+            } catch (e: Exception) {
+                runOnUiThread {
+                    Toast.makeText(
+                        this@LoginActivity,
+                        "Erro no login: ${e.message}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }
