@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Manifesto da aplicação Android que define as configurações principais -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Permissão para acesso à Internet, necessária para procurar dados dos filmes e autenticação -->
     <uses-permission android:name="android.permission.INTERNET"/>
 
+    <!-- Permissão para acesso a gravação de audio -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
+    <!-- Configuração principal da aplicação -->
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -14,18 +19,25 @@
         android:roundIcon="@mipmap/icons_movie_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Filmes">
+
+        <!-- Activity que mostra os detalhes de um filme específico -->
         <activity
             android:name=".DetailActivity"
             android:exported="false" />
+
+        <!-- Activity principal que mostra a lista de filmes -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
 
         </activity>
 
+        <!-- Activity de login para autenticação do utilizador -->
         <activity
             android:name=".LoginActivity"
             android:exported="false" />
+
+        <!-- Activity principal de introdução -->
         <activity
             android:name=".IntroActivity"
             android:exported="true">
@@ -36,8 +48,14 @@
             </intent-filter>
         </activity>
 
+        <!-- Activity de registo para novos utilizadores -->
         <activity
             android:name=".RegisterActivity"
+            android:exported="false" />
+
+        <!-- Activity que mostra o perfil do utilizador -->
+        <activity
+            android:name=".ProfileActivity"
             android:exported="false" />
 
     </application>

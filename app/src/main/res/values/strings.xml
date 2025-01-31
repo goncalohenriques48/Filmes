@@ -47,5 +47,11 @@
     <string name="info_ano">Ano Letivo: 2024/2025</string>
     <string name="info_autores">Autores:\nGonçalo Henriques 21590\nRodrigo Henriques 25268</string>
     <string name="fechar">Fechar</string>
+    <string name="email_login">Email</string>
+    <string name="email_profile">Email:</string>
+    <string name="logout">Logout</string>
+    <string name="nome_profile">Nome:</string>
+    <string name="alterar_foto">Alterar Foto</string>
+    <string name="perfil">Perfil</string>
 
 </resources>

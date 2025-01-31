@@ -24,24 +24,59 @@ import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
 import com.google.gson.Gson
 
+/**
+ * Activity responsável por mostrar os detalhes de um filme específico
+ * Mostra informações completas como sinopse, atores, avaliações, etc.
+ */
 class DetailActivity : AppCompatActivity() {
+    /**
+     * Fila de "requests" Volley para chamadas à API
+     * Componentes para requisições HTTP
+     */
     private lateinit var mRequestQueue: RequestQueue
+    /**
+     * "Request" específica para obter detalhes do filme
+     */
     private lateinit var mStringRequest: StringRequest
+    /**
+     * Indicador de carregamento
+     */
     private lateinit var progressBar: ProgressBar
+    /**
+     * Views para mostrar as informações do filme
+     */
     private lateinit var titleTxt: TextView
     private lateinit var movieRateTxt: TextView
     private lateinit var movieTimeTxt: TextView
     private lateinit var movieSummaryInfo: TextView
     private lateinit var movieActorsInfo: TextView
+    /**
+     * ID do filme a ser mostrado
+     */
     private var idFilm: Int = 0
+    /**
+     * ImageViews para poster e botão de voltar
+     */
     private lateinit var pic2: ImageView
     private lateinit var backImg: ImageView
+    /**
+     * Adaptadores para as listas de atores e categorias
+     */
     private lateinit var adapterActorList: RecyclerView.Adapter<*>
     private lateinit var adapterCategory: RecyclerView.Adapter<*>
+    /**
+     * RecyclerViews para mostrar listas de atores e categorias
+     */
     private lateinit var recyclerViewActors: RecyclerView
     private lateinit var recyclerViewCategory: RecyclerView
+    /**
+     * ScrollView para dar "scroll" ao conteúdo da tela
+     */
     private lateinit var scrollView: NestedScrollView
 
+    /**
+     * Inicializa a Activity e configura a interface
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -57,6 +92,10 @@ class DetailActivity : AppCompatActivity() {
         sendRequest()
     }
 
+    /**
+     * Faz o "request" HTTP para obter os detalhes do filme
+     * Atualiza a interface com os dados recebidos
+     */
     private fun sendRequest() {
         mRequestQueue = Volley.newRequestQueue(this)
         progressBar.visibility = View.VISIBLE
@@ -64,16 +103,19 @@ class DetailActivity : AppCompatActivity() {
 
         mStringRequest = StringRequest(Request.Method.GET, "https://moviesapi.ir/api/v1/movies/$idFilm",
             { response ->
+                // Processar resposta
                 val gson = Gson()
                 progressBar.visibility = View.GONE
                 scrollView.visibility = View.VISIBLE
 
+                //Gson converte o JSON para objeto FilmItem
                 val item = gson.fromJson(response, FilmItem::class.java)
 
                 Glide.with(this@DetailActivity)
                     .load(item.poster)
                     .into(pic2)
 
+                // Atualizar interface
                 titleTxt.text = item.title
                 movieRateTxt.text = item.imdbRating
                 movieTimeTxt.text = item.runtime
@@ -90,13 +132,19 @@ class DetailActivity : AppCompatActivity() {
                 }
             },
             { error ->
+                // Tratar erro
                 progressBar.visibility = View.GONE
-                Log.i("UiLover", "onErrorResponse: ${error.toString()}")
+                Log.i("MoviesApp", "onErrorResponse: ${error.toString()}")
             }
         )
+        // Adicionar requisição à fila
         mRequestQueue.add(mStringRequest)
     }
 
+    /**
+     * Inicializa e configura todos os componentes da interface
+     * Define os listeners e layouts necessários
+     */
     private fun initView() {
         titleTxt = findViewById(R.id.MovieNameTxt)
         progressBar = findViewById(R.id.ProgressBarDetail)

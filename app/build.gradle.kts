@@ -42,17 +42,23 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+
+    // Para slider de imagens
     implementation("androidx.viewpager2:viewpager2:1.1.0")
+    // Carregamento e cache de imagens
     implementation ("com.github.bumptech.glide:glide:4.12.0")
-    implementation("com.android.volley:volley:1.2.1")
-    implementation("com.google.code.gson:gson:2.9.1")
+
+    // Networking e Parse de JSON
+    implementation("com.android.volley:volley:1.2.1")              // Requisições HTTP
+    implementation("com.google.code.gson:gson:2.9.1")              // Conversão JSON <-> Objetos Kotlin
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation ("io.github.jan-tennert.supabase:postgrest-kt:1.4.7")
-    implementation ("io.github.jan-tennert.supabase:gotrue-kt:1.4.7")
-    implementation ("io.ktor:ktor-client-android:2.3.7")
+    // Supabase
+    implementation ("io.github.jan-tennert.supabase:postgrest-kt:1.4.7") // Cliente PostgreSQL
+    implementation ("io.github.jan-tennert.supabase:gotrue-kt:1.4.7")    // Autenticação
+    implementation ("io.ktor:ktor-client-android:2.3.7")                 // Cliente HTTP
 
 
 

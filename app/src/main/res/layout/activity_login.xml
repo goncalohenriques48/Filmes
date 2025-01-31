@@ -34,7 +34,7 @@
                 android:id="@+id/editTextText"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:hint="@string/username"
+                android:hint="@string/email_login"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"

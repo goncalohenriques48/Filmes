@@ -46,36 +46,90 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import kotlin.math.sqrt
+import android.widget.TextView
 
-
+/**
+ * Activity principal da aplicação
+ * Responsável por mostrar a interface principal com listas de filmes, categorias,
+ * pesquisa por voz e funcionalidades de sensor
+ */
 class MainActivity : AppCompatActivity(), SensorEventListener {
+    /**
+     * Adaptador para a lista dos melhores filmes
+     */
     private lateinit var adapterBestMovies: RecyclerView.Adapter<*>
+
+    /**
+     * Adaptador para a lista de próximos filmes
+     */
     private lateinit var adapterUpComing: RecyclerView.Adapter<*>
+
+    /**
+     * Adaptador para a lista de categorias
+     */
     private lateinit var adapterCategory: RecyclerView.Adapter<*>
+
+    /**
+     * RecyclerView que mostra a lista dos melhores filmes
+     */
     private lateinit var recyclerViewBestMovies: RecyclerView
+
+    /**
+     * RecyclerView que mostra os próximos filmes
+     */
     private lateinit var recyclerViewUpcoming: RecyclerView
+
+    /**
+     * RecyclerView que mostra as categorias
+     */
     private lateinit var recyclerViewCategory: RecyclerView
+
+    /**
+     * Fila de requisições para chamadas à API
+     */
     private lateinit var mRequestQueue: RequestQueue
-    private lateinit var mStringRequest: StringRequest
-    private lateinit var mStringRequest2: StringRequest
-    private lateinit var mStringRequest3: StringRequest
-    private lateinit var loading1: ProgressBar
-    private lateinit var loading2: ProgressBar
-    private lateinit var loading3: ProgressBar
+
+    /**
+     * Requisições específicas para diferentes endpoints da API
+     */
+    private lateinit var mStringRequest: StringRequest  // Para melhores filmes
+    private lateinit var mStringRequest2: StringRequest // Para categorias
+    private lateinit var mStringRequest3: StringRequest // Para próximos filmes
+
+    /**
+     * Indicadores de carregamento para cada secção
+     */
+    private lateinit var loading1: ProgressBar  // Para melhores filmes
+    private lateinit var loading2: ProgressBar  // Para categorias
+    private lateinit var loading3: ProgressBar  // Para próximos filmes
+
+    /**
+     * ViewPager2 para o slider de imagens
+     */
     private lateinit var viewPager2: ViewPager2
+
+    /**
+     * Handler para controlar a transição automática do slider
+     */
     private val sliderHandler = android.os.Handler()
 
-    private lateinit var searchEdt: EditText
-    private lateinit var micButton: ImageView
-    private val SPEECH_REQUEST_CODE = 0
+    /**
+     * Componentes para pesquisa por voz
+     */
+    private lateinit var searchEdt: EditText    // Campo de texto para pesquisa
+    private lateinit var micButton: ImageView   // Botão do microfone
+    private val SPEECH_REQUEST_CODE = 0         // Código para permissão
 
-    private lateinit var sensorManager: SensorManager
-    private var accelerometer: Sensor? = null
-    private var lastUpdate: Long = 0
-    private var lastX: Float = 0f
-    private var lastY: Float = 0f
-    private var lastZ: Float = 0f
-    private val SHAKE_THRESHOLD = 200
+    /**
+     * Componentes para detecção de movimento (shake)
+     */
+    private lateinit var sensorManager: SensorManager   // Gestor de sensores
+    private var accelerometer: Sensor? = null           // Sensor do acelerómetro
+    private var lastUpdate: Long = 0                    // Última atualização
+    private var lastX: Float = 0f                       // Último valor X
+    private var lastY: Float = 0f                       // Último valor Y
+    private var lastZ: Float = 0f                       // Último valor Z
+    private val SHAKE_THRESHOLD = 200                   // Limite para detectar a agitação
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,29 +150,47 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
 
         setupVoiceSearch()
 
-        // Inicializar sensor
+        // Inicialização sensor
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         accelerometer = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
+        val viewProfile: TextView = findViewById(R.id.ViewProfile)
+
+        viewProfile.setOnClickListener {
+
+            startActivity(Intent(this, ProfileActivity::class.java))
+
+        }
+
     }
 
+    /**
+     * Funções principais para requisições à API
+     */
     private fun sendRequestBestMovies() {
+        // Inicialização da fila de requisições
         mRequestQueue = Volley.newRequestQueue(this)
         loading1.visibility = View.VISIBLE
 
+        // Criação da requisição
         mStringRequest = StringRequest(
-            Request.Method.GET, "https://moviesapi.ir/api/v1/movies?page=1",
+            Request.Method.GET, "https://moviesapi.ir/api/v1/movies?page=1",    // Método HTTP e URL da API
             { response ->
+                // Sucesso - processar resposta
                 val gson = Gson()
                 loading1.visibility = View.GONE
+                //Gson converte o JSON para objeto ListFilm
                 val items = gson.fromJson(response, ListFilm::class.java)
                 adapterBestMovies = FilmListAdapter(items)
                 recyclerViewBestMovies.adapter = adapterBestMovies
             },
             { error ->
+                // Erro - tratar falha
                 loading1.visibility = View.GONE
-                Log.i("UiLover", "onErrorResponse: $error")
+                Log.i("MoviesApp", "onErrorResponse: $error")
             }
         )
+        // Adicionar requisição à fila
         mRequestQueue.add(mStringRequest)
     }
 
@@ -137,7 +209,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             },
             { error ->
                 loading3.visibility = View.GONE
-                Log.i("UiLover", "onErrorResponse: $error")
+                Log.i("MoviesApp", "onErrorResponse: $error")
             }
         )
         mRequestQueue.add(mStringRequest3)
@@ -151,18 +223,22 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             { response ->
                 loading2.visibility = View.GONE
                 val gson = Gson()
+                //Gson converte o JSON para uma lista de GenresItem
                 val catList: ArrayList<GenresItem> = gson.fromJson(response, object : TypeToken<ArrayList<GenresItem>>() {}.type)
                 adapterCategory = CategoryListAdapter(catList)
                 recyclerViewCategory.adapter = adapterCategory
             },
             { error ->
                 loading2.visibility = View.GONE
-                Log.i("UiLover", "onErrorResponse: ${error.toString()}")
+                Log.i("MoviesApp", "onErrorResponse: ${error.toString()}")
             }
         )
         mRequestQueue.add(mStringRequest2)
     }
 
+    /**
+     * Configuração do slider de banners
+     */
     private fun banners() {
         val sliderItems = mutableListOf(
             SliderItems(R.drawable.wide),
@@ -198,14 +274,22 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         viewPager2.currentItem = viewPager2.currentItem + 1
     }
 
+    /**
+     * Remove o listener quando a activity está em pausa
+     */
     override fun onPause() {
         super.onPause()
         sliderHandler.removeCallbacks(sliderRunnable)
+        // Remove o listener quando a aplicação está em segundo plano
         sensorManager.unregisterListener(this)
     }
 
+    /**
+     * Regista o listener quando a activity está ativa
+     */
     override fun onResume() {
         super.onResume()
+        // Regista o sensor quando a aplicação está em primeiro plano
         sliderHandler.postDelayed(sliderRunnable, 2000)
         accelerometer?.let {
             sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
@@ -228,6 +312,9 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         loading3 = findViewById(R.id.progressBar3)
     }
 
+    /**
+     * Configuração da pesquisa por voz
+     */
     private fun setupVoiceSearch() {
         searchEdt = findViewById(R.id.editTextText2)
         micButton = findViewById(R.id.microphoneButton)
@@ -239,12 +326,20 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             }
         }
     }
+
+    /**
+     * Função que verifica se a permissão já foi concedida
+     */
     private fun checkAudioPermission(): Boolean {
         return ContextCompat.checkSelfPermission(
             this,
             Manifest.permission.RECORD_AUDIO
         ) == PackageManager.PERMISSION_GRANTED
     }
+
+    /**
+     * Função que solicita a permissão ao utilizador se necessário
+     */
     private fun requestAudioPermission() {
         ActivityCompat.requestPermissions(
             this,
@@ -252,6 +347,10 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             SPEECH_REQUEST_CODE
         )
     }
+
+    /**
+     * A função é iniciada quando o utilizador clica no botão do microfone
+     */
     private fun startVoiceRecognition() {
         val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
             putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
@@ -263,11 +362,15 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(
                 this,
-                "Seu dispositivo não suporta reconhecimento de voz",
+                "O seu dispositivo não suporta reconhecimento de voz",
                 Toast.LENGTH_SHORT
             ).show()
         }
     }
+
+    /**
+     * Após o reconhecimento, o resultado é processado e utilizado para pesquisa
+     */
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == SPEECH_REQUEST_CODE && resultCode == RESULT_OK) {
@@ -299,21 +402,27 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             }
         }
     }
+
+    /**
+     * Funções para a pesquisa de filmes
+     */
     private fun searchMovies(query: String) {
         loading1.visibility = View.VISIBLE
         mRequestQueue = Volley.newRequestQueue(this)
-        // URL da API com o parâmetro de busca
+        // URL da API com o parâmetro de procura
         val url = "https://moviesapi.ir/api/v1/movies?q=$query"
         mStringRequest = StringRequest(
             Request.Method.GET,
             url,
             { response ->
+                // Processar resultados da pesquisa
                 loading1.visibility = View.GONE
                 val gson = Gson()
+                //Gson converte o JSON para objeto ListFilm
                 val listFilm = gson.fromJson(response, ListFilm::class.java)
                 // Verifica se encontrou algum filme
                 if (listFilm.data?.isNotEmpty() == true) {
-                    // Pega o primeiro filme encontrado
+                    // Agarra o primeiro filme encontrado
                     val firstMovie = listFilm.data!![0]
                     // Abre o DetailActivity com o ID do filme encontrado
                     val intent = Intent(this, DetailActivity::class.java)
@@ -328,17 +437,22 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 }
             },
             { error ->
+                // Tratar erro na pesquisa
                 loading1.visibility = View.GONE
                 Toast.makeText(
                     this,
-                    "Erro ao buscar o filme: ${error.message}",
+                    "Erro ao procurar o filme: ${error.message}",
                     Toast.LENGTH_SHORT
                 ).show()
             }
         )
+        // Adicionar requisição à fila
         mRequestQueue.add(mStringRequest)
     }
 
+    /**
+     * Funções para detecção de movimento
+     */
     override fun onSensorChanged(event: SensorEvent) {
         if (event.sensor.type == Sensor.TYPE_ACCELEROMETER) {
             val curTime = System.currentTimeMillis()
@@ -346,41 +460,48 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             if ((curTime - lastUpdate) > 100) {
                 val diffTime = curTime - lastUpdate
                 lastUpdate = curTime
-                
+
+                // Obter valores do acelerómetro
                 val x = event.values[0]
                 val y = event.values[1]
                 val z = event.values[2]
-                
+
+                // Calcular a velocidade do movimento
                 val speed = sqrt(
-                    ((x - lastX) * (x - lastX) + 
-                    (y - lastY) * (y - lastY) + 
+                    ((x - lastX) * (x - lastX) +
+                    (y - lastY) * (y - lastY) +
                     (z - lastZ) * (z - lastZ)) / diffTime * 10000
                 )
-                
+
+                // Se ultrapassar o limite, procurar filme aleatório
                 if (speed > SHAKE_THRESHOLD) {
-                    // Usuário agitou o dispositivo, buscar filme aleatório
+                    // Utilizador agitou o dispositivo, procurar filme aleatório
                     getRandomMovie()
                 }
-                
+
+                // Atualizar valores anteriores
                 lastX = x
                 lastY = y
                 lastZ = z
             }
         }
     }
-    
+
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         // Não é necessário implementar
     }
-    
+
+    /**
+     * Função para procurar filme aleatório
+     */
     private fun getRandomMovie() {
         loading1.visibility = View.VISIBLE
         mRequestQueue = Volley.newRequestQueue(this)
-        
-        // Gerar um ID aleatório entre 1 e 250 (ajuste conforme necessário)
+
+        // Gerar um ID aleatório entre 1 e 250 (ajustar conforme necessário)
         val randomId = (1..250).random()
         val url = "https://moviesapi.ir/api/v1/movies/$randomId"
-        
+
         mStringRequest = StringRequest(
             Request.Method.GET,
             url,
@@ -388,12 +509,12 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 loading1.visibility = View.GONE
                 val gson = Gson()
                 val movie = gson.fromJson(response, FilmItem::class.java)
-                
+
                 // Abrir DetailActivity com o filme aleatório
                 val intent = Intent(this, DetailActivity::class.java)
                 intent.putExtra("id", movie.id)
                 startActivity(intent)
-                
+
                 Toast.makeText(
                     this,
                     "Filme aleatório encontrado!",
@@ -404,7 +525,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
                 loading1.visibility = View.GONE
                 Toast.makeText(
                     this,
-                    "Erro ao buscar filme aleatório: ${error.message}",
+                    "Erro ao procurar filme aleatório: ${error.message}",
                     Toast.LENGTH_SHORT
                 ).show()
             }
