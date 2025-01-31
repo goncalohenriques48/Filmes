@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Movies</string>
+    <string name="app_name">FilmUnity</string>
     <string name="discover_your">Descobre o teu</string>
     <string name="favorite_show">Filme Favorito</string>
     <string name="watch">Vê Agora ou Mais tarde</string>
