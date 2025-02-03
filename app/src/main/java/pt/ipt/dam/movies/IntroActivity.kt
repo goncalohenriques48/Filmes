@@ -1,7 +1,6 @@
 package pt.ipt.dam.movies
 
 import android.app.Dialog
-import android.widget.TextView
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button

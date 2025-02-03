@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.android.volley.Request
 import com.android.volley.RequestQueue
-import com.android.volley.VolleyError
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.bumptech.glide.Glide
@@ -134,7 +133,7 @@ class DetailActivity : AppCompatActivity() {
             { error ->
                 // Tratar erro
                 progressBar.visibility = View.GONE
-                Log.i("MoviesApp", "onErrorResponse: ${error.toString()}")
+                Log.i("MoviesApp", "onErrorResponse: $error")
             }
         )
         // Adicionar requisição à fila

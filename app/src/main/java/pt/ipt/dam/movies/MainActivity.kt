@@ -7,12 +7,28 @@ import Domain.FilmItem
 import Domain.GenresItem
 import Domain.ListFilm
 import Domain.SliderItems
+import android.Manifest
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.util.Log
 import android.view.View
+import android.widget.EditText
+import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,27 +42,8 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-
-import android.Manifest
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.speech.RecognitionListener
-import android.speech.SpeechRecognizer
-import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import android.speech.RecognizerIntent
-import android.content.ActivityNotFoundException
-import android.content.Context
-import java.util.*
-import android.hardware.Sensor
-import android.hardware.SensorEvent
-import android.hardware.SensorEventListener
-import android.hardware.SensorManager
+import java.util.Locale
 import kotlin.math.sqrt
-import android.widget.TextView
 
 /**
  * Activity principal da aplicação
@@ -230,7 +227,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
             },
             { error ->
                 loading2.visibility = View.GONE
-                Log.i("MoviesApp", "onErrorResponse: ${error.toString()}")
+                Log.i("MoviesApp", "onErrorResponse: $error")
             }
         )
         mRequestQueue.add(mStringRequest2)
@@ -261,7 +258,7 @@ class MainActivity : AppCompatActivity(), SensorEventListener {
         }
 
         viewPager2.setPageTransformer(compositePageTransformer)
-        viewPager2.setCurrentItem(1)
+        viewPager2.currentItem = 1
         viewPager2.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)

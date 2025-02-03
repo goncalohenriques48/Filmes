@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Manifesto da aplicação Android que define as configurações principais -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Permissão para acesso à Internet, necessária para procurar dados dos filmes e autenticação -->
     <uses-permission android:name="android.permission.INTERNET"/>

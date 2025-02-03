@@ -16,7 +16,6 @@
 
     <ScrollView
 
-        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -31,7 +30,6 @@
 
             <RelativeLayout
 
-                android:id="@+id/relative"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_margin="16dp"
@@ -94,7 +92,6 @@
 
             <TextView
 
-                android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -146,7 +143,6 @@
 
             <TextView
 
-                android:id="@+id/textView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -201,7 +197,6 @@
 
             <TextView
 
-                android:id="@+id/textView12"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -287,21 +282,7 @@
 
 
 
-                <TextView
 
-                    android:id="@+id/ViewExplorer"
-                    android:layout_width="2dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.25"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:paddingTop="10dp"
-                    android:text="@string/explorer"
-                    android:textColor="@color/white"
-                    app:drawableTint="@color/white"
-                    app:drawableTopCompat="@drawable/btn_1">
-
-                </TextView>
 
 
 
@@ -314,18 +295,7 @@
 
 
 
-                    <TextView
 
-                        android:id="@+id/ViewFavorite"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:paddingTop="10dp"
-                        android:text="@string/favorite"
-                        android:textColor="@color/white"
-                        app:drawableTint="@color/white"
-                        app:drawableTopCompat="@drawable/btn_2" />
 
                 </LinearLayout>
 
@@ -340,18 +310,7 @@
 
 
 
-                    <TextView
 
-                        android:id="@+id/ViewCart"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical"
-                        android:paddingTop="10dp"
-                        android:text="@string/cart"
-                        android:textColor="@color/white"
-                        app:drawableTint="@color/white"
-                        app:drawableTopCompat="@drawable/btn_3" />
 
                 </LinearLayout>
 

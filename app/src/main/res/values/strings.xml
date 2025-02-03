@@ -9,7 +9,6 @@
     <string name="start2">Start2</string>
 
     <string name="login">Login</string>
-    <string name="username">UserName</string>
     <string name="password">Password</string>
     <string name="forget_your_password">Esqueceu a sua Password?</string>
     <string name="don_t_have_an_account">Não tem uma conta?</string>
@@ -23,10 +22,6 @@
     <string name="favorite">Favorito</string>
     <string name="cart">Carrinho</string>
     <string name="profile">Perfil</string>
-    <string name="icon_explorer">Icon Explorer</string>
-    <string name="icon_favorite">Icon Favorite</string>
-    <string name="icon_cart">Icon Cart</string>
-    <string name="icon_profile">Icon Profile</string>
 
     <string name="TitleTxt">TitleTxt</string>
     <string name="summary">Resumo</string>
@@ -53,5 +48,8 @@
     <string name="nome_profile">Nome:</string>
     <string name="alterar_foto">Alterar Foto</string>
     <string name="perfil">Perfil</string>
+    <string name="_0">0</string>
+    <string name="textview">TextView</string>
+    <string name="test">test</string>
 
 </resources>
